@@ -1,9 +1,9 @@
 import java.util.concurrent.RecursiveTask;
 
 public class ParallelMergeSort extends RecursiveTask<int[]> {
-    private int[] array;
-    private int start;
-    private int end;
+    private final int[] array;
+    private final int start;
+    private final int end;
 
     public ParallelMergeSort(int[] array, int start, int end) {
         this.array = array;
@@ -20,37 +20,51 @@ public class ParallelMergeSort extends RecursiveTask<int[]> {
 
             invokeAll(left, right);
 
-            merge(array, left.getRawResult(), mid, right.getRawResult());
+            merge(array, start, mid, end);
         }
 
         return array;
     }
 
-    private void merge(int[] array, int[] left, int mid, int[] right) {
-        int start2 = mid + 1;
-        int index = start;
+    private void merge(int[] array, int start, int mid, int end) {
+        int[] temp = new int[end - start + 1];
 
-        while (start <= mid && start2 <= end) {
-            if (left[start] <= right[start2]) {
-                array[index] = left[start];
-                start++;
+        int i = start;
+        int j = mid + 1;
+        int k = 0;
+
+        while (i <= mid && j <= end) {
+            if (array[i] <= array[j]) {
+                temp[k] = array[i];
+                i++;
             } else {
-                array[index] = right[start2];
-                start2++;
+                temp[k] = array[j];
+                j++;
             }
-            index++;
+            k++;
         }
 
-        while (start <= mid) {
-            array[index] = left[start];
-            index++;
+        if (i <= mid) {
+            while (i <= mid) {
+                temp[k] = array[i];
+                i++;
+                k++;
+            }
+        }
+
+        if (j <= end) {
+            while (j <= end) {
+                temp[k] = array[j];
+                j++;
+                k++;
+            }
+        }
+
+        k = 0;
+        while (start <= end) {
+            array[start] = temp[k];
             start++;
-        }
-
-        while (start2 <= end) {
-            array[index] = right[start2];
-            index++;
-            start2++;
+            k++;
         }
     }
 }

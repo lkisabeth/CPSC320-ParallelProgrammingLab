@@ -1,7 +1,7 @@
 import java.util.Random;
 import java.util.concurrent.ForkJoinPool;
 
-public class main {
+public class Main {
     public static void main(String[] args) {
         // instantiate an array of 200M random numbers
         int[] array = new int[200000000];
@@ -20,6 +20,11 @@ public class main {
 
         // verify that the result is sorted
         System.out.println(isSorted(result) ? "Sorted" : "Not Sorted");
+        /* uncomment this section to print the whole sorted array
+        for (int num : result) {
+            System.out.print(num + " ");
+        }
+         */
     }
 
     private static boolean isSorted(int[] array) {
